@@ -1,22 +1,24 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<!-- 允许在 iPhone 上作为独立 App 全屏运行 -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<!-- 顶部状态栏样式 -->
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<!-- 在 iPhone 桌面上显示的 App 名字 -->
-<meta name="apple-mobile-web-app-title" content="生存日语">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>日本日常日语</title>
+    <!-- 优化了 viewport，禁止用户缩放，确保 PWA 应用的稳定显示 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- PWA iOS 专属配置 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="生存日语">
+    
+    <title>日本日常生存日语速查</title>
     <style>
         :root {
             --bg-color: #f7f9fb;
             --primary: #0077b6;
             --accent: #ff6b6b;
             --card-bg: #ffffff;
-            --text-main: #2b2d42;
+            --text-main: #1a1a1a;
             --text-sub: #6c757d;
         }
 
@@ -24,8 +26,14 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif;
+            /* 针对移动端优化字体族，增加可读性 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 调整整体基准字号，适应 iPhone 屏幕 */
+        html {
+            font-size: 16px; /* 提高基准字号 */
         }
 
         body {
@@ -35,34 +43,36 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 16px;
+            /* 增加顶部安全区适配，防止刘海遮挡 */
+            padding: env(safe-area-inset-top, 20px) 16px 20px 16px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            width: 100%;
         }
 
         h1 {
-            font-size: 1.3rem;
+            font-size: 1.5rem; /* 增大标题 */
             color: var(--primary);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .subtitle {
-            font-size: 0.8rem;
+            font-size: 0.95rem; /* 增大副标题 */
             color: var(--text-sub);
         }
 
         /* 场景选择标签 */
         .category-tabs {
             display: flex;
-            gap: 8px;
+            gap: 12px; /* 增大间距，方便手指点击 */
             overflow-x: auto;
             width: 100%;
-            max-width: 400px;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
+            max-width: 450px;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
             -webkit-overflow-scrolling: touch;
         }
 
@@ -73,9 +83,9 @@
         .tab-btn {
             background: #e9ecef;
             border: none;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 0.82rem;
+            padding: 10px 16px; /* 增大按钮区域 */
+            border-radius: 24px;
+            font-size: 0.95rem; /* 增大标签字号 */
             cursor: pointer;
             white-space: nowrap;
             color: var(--text-main);
@@ -92,12 +102,12 @@
         /* 卡片区域 */
         .card {
             width: 100%;
-            max-width: 400px;
+            max-width: 450px; /* 卡片最大宽度略增 */
             background: var(--card-bg);
             border-radius: 16px;
-            padding: 20px;
+            padding: 24px 20px; /* 增加内边距 */
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             border: 1px solid #e2e8f0;
         }
 
@@ -105,84 +115,87 @@
             display: inline-block;
             background: #e0f2fe;
             color: var(--primary);
-            font-size: 0.75rem;
+            font-size: 0.85rem; /* 增大情景标签 */
             font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 6px;
-            margin-bottom: 12px;
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-bottom: 16px;
         }
 
         .speaker-label {
-            font-size: 0.8rem;
+            font-size: 0.9rem; /* 增大提示文字 */
             font-weight: bold;
             color: #8d99ae;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
         }
 
         .japanese-box {
             background: #f8fafc;
-            border-left: 4px solid var(--primary);
-            padding: 12px;
+            border-left: 5px solid var(--primary); /* 加粗左边框 */
+            padding: 16px; /* 增大内部留白 */
             border-radius: 4px 8px 8px 4px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             cursor: pointer;
         }
 
         .jp-text {
-            font-size: 1.15rem;
+            font-size: 1.4rem; /* 显著增大日文原句字号 */
             font-weight: bold;
             color: #1e293b;
-            line-height: 1.4;
+            line-height: 1.5;
+            word-break: auto-phrase; /* 优化日语自动换行 */
         }
 
         .furigana {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-top: 4px;
+            font-size: 1.05rem; /* 显著增大假名拼音字号，初学者最需要看清这个 */
+            color: #475569;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
         }
 
         .audio-hint {
-            font-size: 0.75rem;
+            font-size: 0.85rem; /* 增大音频提示 */
             color: var(--primary);
-            margin-top: 6px;
+            margin-top: 10px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .chinese-text {
-            font-size: 0.95rem;
+            font-size: 1.15rem; /* 增大中文释义字号 */
             color: #334155;
-            margin-bottom: 16px;
-            line-height: 1.4;
+            margin-bottom: 20px;
+            line-height: 1.5;
         }
 
         .reply-box {
             background: #fff5f5;
             border: 1px dashed var(--accent);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 12px;
+            border-radius: 10px;
+            padding: 16px; /* 增大回复框内边距 */
+            margin-top: 16px;
         }
 
         .reply-title {
-            font-size: 0.8rem;
+            font-size: 0.95rem; /* 增大回复标题 */
             font-weight: bold;
             color: var(--accent);
-            margin-bottom: 6px;
+            margin-bottom: 10px;
         }
 
         .reply-item {
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-            line-height: 1.4;
+            font-size: 1.05rem; /* 显著增大回复选项字号 */
+            margin-bottom: 10px;
+            line-height: 1.5;
         }
 
         .btn-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
+            margin-bottom: 10px;
         }
 
         .nav-btn {
@@ -190,20 +203,22 @@
             background: var(--primary);
             color: #fff;
             border: none;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 16px; /* 增大按钮触摸面积 */
+            border-radius: 14px;
             font-weight: bold;
-            font-size: 0.95rem;
+            font-size: 1.1rem; /* 增大按钮字号 */
             cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,119,182,0.2);
         }
 
         .nav-btn.secondary {
             background: #cbd5e1;
             color: #334155;
+            box-shadow: none;
         }
 
         .progress {
-            font-size: 0.8rem;
+            font-size: 0.95rem; /* 增大进度提示 */
             color: #94a3b8;
             margin-top: 12px;
             text-align: center;
@@ -213,11 +228,11 @@
 <body>
 
     <header>
-        <h1>🏪 日本日常会话</h1>
+        <h1>🏪 日本日常生存日语速查</h1>
         <p class="subtitle">大家的日本语 · 1~25课 核心实战句型</p>
     </header>
 
-    <!-- 场景切换栏（已同步为 1~25 课对应分类） -->
+    <!-- 场景切换栏 -->
     <div class="category-tabs">
         <button class="tab-btn active" onclick="switchCategory(this, 'all')">全部(1-25)</button>
         <button class="tab-btn" onclick="switchCategory(this, '第1-5课:基础会话')">1-5课:基础</button>
@@ -272,7 +287,7 @@
                 category: "第1-5课:基础会话",
                 situation: "第2课 · 询问物品是谁的",
                 jp: "これは誰の傘ですか？",
-                furigana: "这是 だれの かさですか？",
+                furigana: "これは だれの かさですか？",
                 cn: "请问这是谁的雨伞？",
                 replies: [
                     "👉 <strong>回答是自己的</strong>：私のです。（是我的）",
@@ -501,7 +516,7 @@
                 category: "第21-25课:思维与进阶",
                 situation: "第22课 · 用长句子修饰物品/人",
                 jp: "これは昨日私がスーパーで買ったパンです。",
-                furigana: "这是 きのう わたしが すーぱーで かった ぱんです。",
+                furigana: "これは きのう わたしが すーぱーで かった ぱんです。",
                 cn: "这是我昨天在超市买的面包。",
                 replies: [
                     "👉 <strong>回应</strong>：おいしそうですね！（看起来很好吃呢！）"
@@ -566,7 +581,6 @@
             document.getElementById('progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
         }
 
-        // 修复：显式接收 element 参数，避免兼容性问题
         function switchCategory(btnEl, cat) {
             const btns = document.querySelectorAll('.tab-btn');
             btns.forEach(b => b.classList.remove('active'));
@@ -599,49 +613,49 @@
             renderCard();
         }
 
-        // 原生语音朗读功能
+        // 升级版：高品质日语拟真发音
         function playVoice() {
-    const text = document.getElementById('jp-text').innerText;
-    
-    if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // 停止上一段正在播放的音频
+            const text = document.getElementById('jp-text').innerText;
+            
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 停止上一段正在播放的音频
 
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'ja-JP';
-        utterance.rate = 0.9;  // 稍微放慢语速，清晰自然
-        utterance.pitch = 1.05; // 略微提升音调，使日语音调更轻快温柔
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.9;  // 稍微放慢语速，清晰自然
+                utterance.pitch = 1.05; // 略微提升音调，使日语音调更轻快温柔
 
-        // 获取系统当前可用的所有语音包
-        const voices = window.speechSynthesis.getVoices();
-        
-        // 优先筛选更自然的优质日文音色（优先匹配：自然音/Neural/Nanami/Kyoko/Google等）
-        const bestJpVoice = voices.find(v => 
-            v.lang.includes('ja') && (
-                v.name.includes('Natural') || 
-                v.name.includes('Online') || 
-                v.name.includes('Nanami') || 
-                v.name.includes('Kyoko') || 
-                v.name.includes('Google 日本語') ||
-                v.name.includes('Neural')
-            )
-        ) || voices.find(v => v.lang.includes('ja') || v.lang.includes('JP'));
+                // 获取系统当前可用的所有语音包
+                const voices = window.speechSynthesis.getVoices();
+                
+                // 优先筛选更自然的优质日文音色
+                const bestJpVoice = voices.find(v => 
+                    v.lang.includes('ja') && (
+                        v.name.includes('Natural') || 
+                        v.name.includes('Online') || 
+                        v.name.includes('Nanami') || 
+                        v.name.includes('Kyoko') || 
+                        v.name.includes('Google 日本語') ||
+                        v.name.includes('Neural')
+                    )
+                ) || voices.find(v => v.lang.includes('ja') || v.lang.includes('JP'));
 
-        if (bestJpVoice) {
-            utterance.voice = bestJpVoice;
+                if (bestJpVoice) {
+                    utterance.voice = bestJpVoice;
+                }
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("当前环境不支持语音合成");
+            }
         }
 
-        window.speechSynthesis.speak(utterance);
-    } else {
-        alert("当前环境不支持语音合成");
-    }
-}
-
-// 预加载系统语音库（解决部分浏览器初次加载 getVoices 为空的问题）
-if ('speechSynthesis' in window) {
-    window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
-    };
-}
+        // 预加载系统语音库
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
 
         // 初始化运行
         renderCard();
