@@ -97,7 +97,7 @@
             border-radius: 16px;
             padding: 20px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             border: 1px solid #e2e8f0;
         }
 
@@ -179,6 +179,36 @@
             line-height: 1.4;
         }
 
+        /* 语速控制条 */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .speed-control input[type="range"] {
+            flex: 1;
+            margin: 0 12px;
+            accent-color: var(--primary);
+        }
+
+        .speed-value {
+            font-weight: bold;
+            color: var(--primary);
+            min-width: 40px;
+            text-align: right;
+        }
+
         .btn-group {
             display: flex;
             gap: 10px;
@@ -247,6 +277,14 @@
             <div class="reply-title">🗣️ 实战回应与解析：</div>
             <div id="replies"></div>
         </div>
+    </div>
+
+    <!-- 语速控制条 -->
+    <div class="speed-control">
+        <span>🐢 慢</span>
+        <input type="range" id="speed-slider" min="0.5" max="1.5" step="0.1" value="0.9" oninput="updateSpeedDisplay(this.value)">
+        <span>快 🐇</span>
+        <span class="speed-value" id="speed-val-display">0.9x</span>
     </div>
 
     <div class="btn-group">
@@ -548,11 +586,16 @@
         let currentIndex = 0;
 
         // ================= 连播功能核心状态 =================
-        let playCount = 0;           // 当前卡片已播放次数
-        const MAX_PLAYS = 5;         // 每张卡片循环播放次数
-        let autoTimer = null;        // 延迟计时器
-        let isInterrupted = false;   // 状态中断标记（防止切歌时上一个音频继续循环）
-        let isAudioUnlocked = false; // 是否已解锁浏览器音频自动播放限制
+        let playCount = 0;           
+        const MAX_PLAYS = 5;         
+        let autoTimer = null;        
+        let isInterrupted = false;   
+        let isAudioUnlocked = false; 
+
+        // 更新滑块显示的数值
+        function updateSpeedDisplay(val) {
+            document.getElementById('speed-val-display').innerText = val + 'x';
+        }
 
         function renderCard() {
             if (currentList.length === 0) return;
@@ -574,15 +617,13 @@
 
             document.getElementById('progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
 
-            // ---- 重置播放状态并准备播放新卡片 ----
             playCount = 0;
-            isInterrupted = true; // 打断上一个语音的循环
-            window.speechSynthesis.cancel(); // 停止当前正在播放的声音
-            clearTimeout(autoTimer); // 清除可能存在的翻页定时器
+            isInterrupted = true; 
+            window.speechSynthesis.cancel(); 
+            clearTimeout(autoTimer); 
 
             updateAudioHint();
 
-            // 如果浏览器声音权限已解锁，自动延迟 0.8 秒后播放这一张
             if (isAudioUnlocked) {
                 autoTimer = setTimeout(() => {
                     isInterrupted = false;
@@ -591,7 +632,6 @@
             }
         }
 
-        // 更新 UI 上的播放状态文字
         function updateAudioHint() {
             const hintEl = document.getElementById('audio-hint');
             if (!isAudioUnlocked) {
@@ -619,7 +659,7 @@
             if (currentIndex < currentList.length - 1) {
                 currentIndex++;
             } else {
-                currentIndex = 0; // 播完一圈回到开头
+                currentIndex = 0; 
             }
             renderCard();
         }
@@ -633,12 +673,9 @@
             renderCard();
         }
 
-        // 核心语音合成 & 循环控制函数
         function playVoice(isManualClick = false) {
-            // 如果还未解锁声音，且不是手动点击的发音框，直接返回
             if (!isAudioUnlocked && !isManualClick) return;
 
-            // 如果用户手动点击了发音框，重新开始算 5 次
             if (isManualClick) {
                 playCount = 0;
                 isInterrupted = true;
@@ -648,12 +685,16 @@
             }
 
             const text = document.getElementById('jp-text').innerText;
-            updateAudioHint(); // 刷新数字
+            updateAudioHint(); 
             
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'ja-JP';
-                utterance.rate = 0.9;
+                
+                // 【核心修改】：读取滑动条当前设定的语速
+                const currentSpeed = parseFloat(document.getElementById('speed-slider').value);
+                utterance.rate = currentSpeed;
+                
                 utterance.pitch = 1.05;
 
                 const voices = window.speechSynthesis.getVoices();
@@ -672,19 +713,16 @@
                     utterance.voice = bestJpVoice;
                 }
 
-                // 【核心逻辑】：这句话读完后的触发事件
                 utterance.onend = () => {
-                    if (isInterrupted) return; // 若已被用户点击下一页打断，则终止循环
+                    if (isInterrupted) return; 
 
                     playCount++;
                     if (playCount < MAX_PLAYS) {
-                        // 还没读够5次，停顿 1 秒后继续读
                         updateAudioHint();
                         autoTimer = setTimeout(() => {
                             if (!isInterrupted) playVoice(false);
                         }, 1000);
                     } else {
-                        // 读够了5次，停顿 1.5 秒后翻页
                         document.getElementById('audio-hint').innerText = "⏭️ 准备切换下一条...";
                         autoTimer = setTimeout(() => {
                             if (!isInterrupted) nextCard();
@@ -698,22 +736,20 @@
             }
         }
 
-        // 预加载系统语音库
         if ('speechSynthesis' in window) {
             window.speechSynthesis.onvoiceschanged = () => {
                 window.speechSynthesis.getVoices();
             };
         }
 
-        // 【关键防御机制】：监听用户的首次点击，用于解锁手机浏览器的自动播放限制
         document.addEventListener('click', function unlockAudio() {
             if (!isAudioUnlocked) {
                 isAudioUnlocked = true;
                 isInterrupted = false;
-                playCount = 0; // 从0开始
-                playVoice(false); // 立即触发当前卡片的循环播放
+                playCount = 0; 
+                playVoice(false); 
             }
-        }, { once: true, capture: true }); // capture: true 保证这是最高优先级的点击事件
+        }, { once: true, capture: true }); 
 
         // 初始化运行
         renderCard();
