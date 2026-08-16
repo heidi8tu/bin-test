@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="生存日语下">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>日本日常日语 (下册)</title>
+    <style>
+        :root {
+            --bg-color: #f7f9fb;
+            --primary: #0077b6;
+            --accent: #ff6b6b;
+            --card-bg: #ffffff;
+            --text-main: #2b2d42;
+            --text-sub: #6c757d;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px; }
+        header { text-align: center; margin-bottom: 12px; }
+        h1 { font-size: 1.3rem; color: var(--primary); margin-bottom: 4px; }
+        .subtitle { font-size: 0.8rem; color: var(--text-sub); }
+        .category-tabs { display: flex; gap: 8px; overflow-x: auto; width: 100%; max-width: 400px; padding-bottom: 8px; margin-bottom: 12px; -webkit-overflow-scrolling: touch; }
+        .category-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { background: #e9ecef; border: none; padding: 8px 14px; border-radius: 20px; font-size: 0.82rem; cursor: pointer; white-space: nowrap; color: var(--text-main); transition: all 0.2s; flex-shrink: 0; }
+        .tab-btn.active { background: var(--primary); color: #fff; font-weight: bold; }
+        .card { width: 100%; max-width: 400px; background: var(--card-bg); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-bottom: 12px; border: 1px solid #e2e8f0; }
+        .situation-tag { display: inline-block; background: #e0f2fe; color: var(--primary); font-size: 0.75rem; font-weight: bold; padding: 4px 8px; border-radius: 6px; margin-bottom: 12px; }
+        .speaker-label { font-size: 0.8rem; font-weight: bold; color: #8d99ae; margin-bottom: 4px; }
+        .japanese-box { background: #f8fafc; border-left: 4px solid var(--primary); padding: 12px; border-radius: 4px 8px 8px 4px; margin-bottom: 12px; cursor: pointer; }
+        .jp-text { font-size: 1.15rem; font-weight: bold; color: #1e293b; line-height: 1.4; }
+        .furigana { font-size: 0.85rem; color: #64748b; margin-top: 4px; }
+        .audio-hint { font-size: 0.75rem; color: var(--primary); margin-top: 6px; display: flex; align-items: center; gap: 4px; font-weight: bold; }
+        .chinese-text { font-size: 0.95rem; color: #334155; margin-bottom: 16px; line-height: 1.4; }
+        .reply-box { background: #fff5f5; border: 1px dashed var(--accent); border-radius: 8px; padding: 12px; margin-top: 12px; }
+        .reply-title { font-size: 0.8rem; font-weight: bold; color: var(--accent); margin-bottom: 6px; }
+        .reply-item { font-size: 0.85rem; margin-bottom: 6px; line-height: 1.4; }
+        .speed-control { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 400px; background: var(--card-bg); padding: 12px 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); font-size: 0.85rem; color: #475569; }
+        .speed-control input[type="range"] { flex: 1; margin: 0 12px; accent-color: var(--primary); }
+        .speed-value { font-weight: bold; color: var(--primary); min-width: 40px; text-align: right; }
+        .btn-group { display: flex; gap: 10px; width: 100%; max-width: 400px; }
+        .nav-btn { flex: 1; background: var(--primary); color: #fff; border: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 0.95rem; cursor: pointer; }
+        .nav-btn.secondary { background: #cbd5e1; color: #334155; }
+        .progress { font-size: 0.8rem; color: #94a3b8; margin-top: 12px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏪 日本日常会话 (下)</h1>
+        <p class="subtitle">大家的日本语 · 26~50课 核心实战句型</p>
+    </header>
+
+    <!-- 跳转回上册的按钮 -->
+    <div style="text-align: center; margin-bottom: 16px;">
+        <a href="index.html" style="text-decoration: none; background: #fff; color: var(--primary); border: 2px solid var(--primary); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            ⬅️ 返回上册 (1-25课)
+        </a>
+    </div>
+
+    <!-- 场景切换栏 (26-50课) -->
+    <div class="category-tabs">
+        <button class="tab-btn active" onclick="switchCategory(this, 'all')">全部(26-50)</button>
+        <button class="tab-btn" onclick="switchCategory(this, '第26-30课:状态与可能')">26-30课:状态</button>
+        <button class="tab-btn" onclick="switchCategory(this, '第31-35课:意向与建议')">31-35课:意向</button>
+        <button class="tab-btn" onclick="switchCategory(this, '第36-40课:目的与被动')">36-40课:被动</button>
+        <button class="tab-btn" onclick="switchCategory(this, '第41-45课:授受与推测')">41-45课:授受</button>
+        <button class="tab-btn" onclick="switchCategory(this, '第46-50课:敬语与使役')">46-50课:敬语</button>
+    </div>
+
+    <div class="card" id="card-container">
+        <span class="situation-tag" id="situation">加载中...</span>
+        <div class="speaker-label">👂 核心句型 / 会话（自动连播中）：</div>
+        <div class="japanese-box" onclick="playVoice(true)">
+            <div class="jp-text" id="jp-text">-</div>
+            <div class="furigana" id="furigana">-</div>
+            <div class="audio-hint" id="audio-hint">🔊 点击屏幕任意位置开始连播</div>
+        </div>
+        <div class="speaker-label">🇨🇳 中文含义：</div>
+        <div class="chinese-text" id="cn-text">-</div>
+        <div class="reply-box">
+            <div class="reply-title">🗣️ 实战回应与解析：</div>
+            <div id="replies"></div>
+        </div>
+    </div>
+
+    <div class="speed-control">
+        <span>🐢 慢</span>
+        <input type="range" id="speed-slider" min="0.5" max="1.5" step="0.1" value="0.9" oninput="updateSpeedDisplay(this.value)">
+        <span>快 🐇</span>
+        <span class="speed-value" id="speed-val-display">0.9x</span>
+    </div>
+
+    <div class="btn-group">
+        <button class="nav-btn secondary" onclick="prevCard()">上一张</button>
+        <button class="nav-btn" onclick="nextCard()">下一张 ➔</button>
+    </div>
+
+    <div class="progress" id="progress">1 / 25</div>
+
+    <script>
+        const survivalCards = [
+            // --- 第 26 课 ---
+            { category: "第26-30课:状态与可能", situation: "第26课 · 寻求解释或说明原因", jp: "気分が悪いんです。少し休んでもいいですか。", furigana: "きぶんが わるいんです。すこし やすんでも いいですか。", cn: "我不太舒服。可以稍微休息一下吗？", replies: ["👉 <strong>关心回应</strong>：大丈夫ですか。無理しないでください。（没事吧？请别勉强。）"] },
+            // --- 第 27 课 ---
+            { category: "第26-30课:状态与可能", situation: "第27课 · 表达能力与可能性", jp: "日本語の新聞が読めますか。", furigana: "にほんごの しんぶんが よめますか。", cn: "你能看懂日文报纸吗？", replies: ["👉 <strong>肯定</strong>：はい、少し読めます。（是的，能看懂一点）", "👉 <strong>否定</strong>：いいえ、まだ読めません。（不，还看不懂）"] },
+            // --- 第 28 课 ---
+            { category: "第26-30课:状态与可能", situation: "第28课 · 同时进行两个动作", jp: "音楽を聴きながら、掃除をします。", furigana: "おんがくを ききながら、そうじを します。", cn: "我一边听音乐，一边打扫卫生。", replies: ["👉 <strong>附和</strong>：それはいいですね。（那挺不错的呢）"] },
+            // --- 第 29 课 ---
+            { category: "第26-30课:状态与可能", situation: "第29课 · 描述眼前的客观状态", jp: "あっ、財布が落ちていますよ。", furigana: "あっ、さいふが おちて いますよ。", cn: "啊，钱包掉在地上了哦。", replies: ["👉 <strong>惊讶与感谢</strong>：本当だ！ありがとうございます。（真的！太感谢了）"] },
+            // --- 第 30 课 ---
+            { category: "第26-30课:状态与可能", situation: "第30课 · 人为状态与事前准备", jp: "会議の資料はもうコピーしてあります。", furigana: "かいぎの しりょうは もう こぴーして あります。", cn: "会议资料已经复印好了。", replies: ["👉 <strong>赞赏/确认</strong>：ご苦労様です。助かりました。（辛苦了，帮大忙了）"] },
+
+            // --- 第 31 课 ---
+            { category: "第31-35课:意向与建议", situation: "第31课 · 表达打算与计划", jp: "週末は家族と温泉に行こうと思っています。", furigana: "しゅうまつは かぞくと おんせんに いこうと おもって います。", cn: "这周末我打算和家人去泡温泉。", replies: ["👉 <strong>祝愿</strong>：いいですね。楽しんできてください。（真好啊。祝你玩得开心）"] },
+            // --- 第 32 课 ---
+            { category: "第31-35课:意向与建议", situation: "第32课 · 给出忠告和建议", jp: "熱があるなら、早く病院へ行ったほうがいいですよ。", furigana: "ねつが あるなら、はやく びょういんへ いった ほうが いいですよ。", cn: "如果发烧的话，最好早点去医院哦。", replies: ["👉 <strong>接受建议</strong>：ええ、そうします。ありがとう。（嗯，我会的。谢谢）"] },
+            // --- 第 33 课 ---
+            { category: "第31-35课:意向与建议", situation: "第33课 · 紧急指示与标语含义", jp: "あの漢字は「危険」という意味です。触るなということです。", furigana: "あの かんじは 「きけん」という いみです。さわるなと いうことです。", cn: "那个汉字是“危险”的意思。就是说“不准触碰”。", replies: ["👉 <strong>确认理解</strong>：分かりました、気をつけます。（明白了，我会小心的）"] },
+            // --- 第 34 课 ---
+            { category: "第31-35课:意向与建议", situation: "第34课 · 按照指示行动", jp: "私が言うとおりに、書いてください。", furigana: "わたしが いう とおりに、かいて ください。", cn: "请按照我说的写。", replies: ["👉 <strong>回应</strong>：はい、分かりました。（好的，明白了）"] },
+            // --- 第 35 课 ---
+            { category: "第31-35课:意向与建议", situation: "第35课 · 设定条件", jp: "説明書を読めば、使い方が分かります。", furigana: "せつめいしょを よめば、つかいかたが わかります。", cn: "只要看了说明书，就知道怎么用了。", replies: ["👉 <strong>求助寻找</strong>：すみません、説明書はどこにありますか？（不好意思，说明书在哪里？）"] },
+
+            // --- 第 36 课 ---
+            { category: "第36-40课:目的与被动", situation: "第36课 · 目的与能力的改变", jp: "忘れないように、メモしておきます。", furigana: "わすれない ように、めもして おきます。", cn: "为了不忘记，我先记一下笔记。", replies: ["👉 <strong>肯定</strong>：それがいいですね。（那样比较好）"] },
+            // --- 第 37 课 ---
+            { category: "第36-40课:目的与被动", situation: "第37课 · 遭受困扰 (被动)", jp: "電車の中で、隣の人に足を踏まれました。", furigana: "でんしゃの なかで、となりの ひとに あしを ふまれました。", cn: "在电车里，被旁边的人踩了脚。", replies: ["👉 <strong>同情</strong>：それは大変でしたね。（那真是太倒霉了）"] },
+            // --- 第 38 课 ---
+            { category: "第36-40课:目的与被动", situation: "第38课 · 表达喜好 (名词化)", jp: "私は一人で買い物をするのが好きです。", furigana: "わたしは ひとりで かいものを するのが すきです。", cn: "我喜欢一个人购物。", replies: ["👉 <strong>认同</strong>：私もです。自分のペースで歩けますから。（我也是。可以按自己的节奏逛）"] },
+            // --- 第 39 课 ---
+            { category: "第36-40课:目的与被动", situation: "第39课 · 感情产生的原因", jp: "ニュースを聞いて、びっくりしました。", furigana: "にゅーすを きいて、びっくりしました。", cn: "听到新闻，我吓了一跳。", replies: ["👉 <strong>共鸣</strong>：本当に驚きましたね。（真的很让人吃惊呢）"] },
+            // --- 第 40 课 ---
+            { category: "第36-40课:目的与被动", situation: "第40课 · 疑问句嵌入", jp: "このサイズが合うかどうか、着てみてもいいですか。", furigana: "この さいずが あうか どうか、きてみても いいですか。", cn: "不知道这个尺码合不合适，我可以试穿一下吗？", replies: ["👉 <strong>店员引导</strong>：はい、試着室はあちらです。（好的，试衣间在那边）"] },
+
+            // --- 第 41 课 ---
+            { category: "第41-45课:授受与推测", situation: "第41课 · 接受上级的恩惠", jp: "部長が私に本を貸してくださいました。", furigana: "ぶちょうが わたしに ほんを かして くださいました。", cn: "部长借给了我一本书。", replies: ["👉 <strong>感叹</strong>：優しい部長ですね。（真是位好部长呢）"] },
+            // --- 第 42 课 ---
+            { category: "第41-45课:授受与推测", situation: "第42课 · 明确目的与用途", jp: "健康のために、毎日野菜を食べています。", furigana: "けんこうの ために、まいにち やさいを たべて います。", cn: "为了健康，我每天都吃蔬菜。", replies: ["👉 <strong>赞同</strong>：素晴らしい習慣ですね。（真是个好习惯呢）"] },
+            // --- 第 43 课 ---
+            { category: "第41-45课:授受与推测", situation: "第43课 · 短暂离开", jp: "ちょっとコンビニへ行って来ます。", furigana: "ちょっと こんびにへ いって きます。", cn: "我稍微去一趟便利店就回来。", replies: ["👉 <strong>拜托帮忙</strong>：ついでに、コーヒーを買ってきてくれませんか。（顺便能帮买杯咖啡吗？）"] },
+            // --- 第 44 课 ---
+            { category: "第41-45课:授受与推测", situation: "第44课 · 难易程度", jp: "この靴はとても軽くて、歩きやすいです。", furigana: "この くつは とても かるくて、あるきやすいです。", cn: "这双鞋很轻，非常好走。", replies: ["👉 <strong>询问详情</strong>：どこで買ったんですか？（在哪里买的呀？）"] },
+            // --- 第 45 课 ---
+            { category: "第41-45课:授受与推测", situation: "第45课 · 假设情况", jp: "カードをなくした場合は、すぐ連絡してください。", furigana: "かーどを なくした ばあいは、すぐ れんらくして ください。", cn: "如果遗失了卡片，请立刻联系我们。", replies: ["👉 <strong>确认</strong>：はい、分かりました。（好的，明白了）"] },
+
+            // --- 第 46 课 ---
+            { category: "第46-50课:敬语与使役", situation: "第46课 · 动作刚刚发生", jp: "たった今、バスが出発したところです。", furigana: "たったいま、ばすが しゅっぱつした ところです。", cn: "公交车刚刚才开走。", replies: ["👉 <strong>遗憾</strong>：あぁ、残念！次のバスを待ちます。（啊，真可惜！等下一班吧）"] },
+            // --- 第 47 课 ---
+            { category: "第46-50课:敬语与使役", situation: "第47课 · 传达听到的消息", jp: "天気予報によると、明日は寒くなるそうです。", furigana: "てんきよほうに よると、あしたは さむくなる そうです。", cn: "根据天气预报，明天好像会变冷。", replies: ["👉 <strong>回应</strong>：じゃ、暖かいコートを着たほうがいいですね。（那最好穿件保暖的外套呢）"] },
+            // --- 第 48 课 ---
+            { category: "第46-50课:敬语与使役", situation: "第48课 · 请求容许 (使役)", jp: "すみません、早く帰らせていただけませんか。", furigana: "すみません、はやく かえらせて いただけませんか。", cn: "不好意思，能不能请您允许我早点回去呢？", replies: ["👉 <strong>询问</strong>：どうしたの？気分が悪いんですか。（怎么了？身体不舒服吗？）"] },
+            // --- 第 49 课 ---
+            { category: "第46-50课:敬语与使役", situation: "第49课 · 尊他语 (抬高对方)", jp: "社長はもうお帰りになりました。", furigana: "しゃちょうは もう おかえりに なりました。", cn: "社长已经回去了。", replies: ["👉 <strong>回应</strong>：そうですか、ではまた明日。（这样啊，那明天再来）"] },
+            // --- 第 50 课 ---
+            { category: "第46-50课:敬语与使役", situation: "第50课 · 自谦语 (降低自己)", jp: "重そうですね。私がお持ちしましょう。", furigana: "おもそうですね。わたしが おもちしましょう。", cn: "看起来很重呢。我来帮您拿吧。", replies: ["👉 <strong>感谢</strong>：ありがとうございます、助かります。（太感谢了，帮大忙了）"] }
+        ];
+
+        let currentList = [...survivalCards];
+        let currentIndex = 0;
+        let playCount = 0;           
+        const MAX_PLAYS = 5;         
+        let autoTimer = null;        
+        let isInterrupted = false;   
+        let isAudioUnlocked = false; 
+
+        function updateSpeedDisplay(val) {
+            document.getElementById('speed-val-display').innerText = val + 'x';
+        }
+
+        function renderCard() {
+            if (currentList.length === 0) return;
+            const item = currentList[currentIndex];
+
+            document.getElementById('situation').innerText = item.situation;
+            document.getElementById('jp-text').innerText = item.jp;
+            document.getElementById('furigana').innerText = item.furigana;
+            document.getElementById('cn-text').innerText = item.cn;
+
+            const repContainer = document.getElementById('replies');
+            repContainer.innerHTML = '';
+            item.replies.forEach(r => {
+                const div = document.createElement('div');
+                div.className = 'reply-item';
+                div.innerHTML = r;
+                repContainer.appendChild(div);
+            });
+
+            document.getElementById('progress').innerText = `${currentIndex + 1} / ${currentList.length}`;
+
+            playCount = 0;
+            isInterrupted = true; 
+            window.speechSynthesis.cancel(); 
+            clearTimeout(autoTimer); 
+
+            updateAudioHint();
+
+            if (isAudioUnlocked) {
+                autoTimer = setTimeout(() => {
+                    isInterrupted = false;
+                    playVoice(false);
+                }, 800);
+            }
+        }
+
+        function updateAudioHint() {
+            const hintEl = document.getElementById('audio-hint');
+            if (!isAudioUnlocked) {
+                hintEl.innerText = "🔊 点击屏幕任意位置开始自动连播";
+            } else {
+                hintEl.innerText = `🔊 自动连播中 ( ${playCount + 1} / ${MAX_PLAYS} )`;
+            }
+        }
+
+        function switchCategory(btnEl, cat) {
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            btnEl.classList.add('active');
+
+            if (cat === 'all') {
+                currentList = [...survivalCards];
+            } else {
+                currentList = survivalCards.filter(c => c.category === cat);
+            }
+            currentIndex = 0;
+            renderCard();
+        }
+
+        function nextCard() {
+            if (currentIndex < currentList.length - 1) {
+                currentIndex++;
+            } else {
+                currentIndex = 0; 
+            }
+            renderCard();
+        }
+
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+            } else {
+                currentIndex = currentList.length - 1;
+            }
+            renderCard();
+        }
+
+        function playVoice(isManualClick = false) {
+            if (!isAudioUnlocked && !isManualClick) return;
+
+            if (isManualClick) {
+                playCount = 0;
+                isInterrupted = true;
+                window.speechSynthesis.cancel();
+                clearTimeout(autoTimer);
+                isInterrupted = false;
+            }
+
+            const text = document.getElementById('jp-text').innerText;
+            updateAudioHint(); 
+            
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP';
+                
+                const currentSpeed = parseFloat(document.getElementById('speed-slider').value);
+                utterance.rate = currentSpeed;
+                utterance.pitch = 1.05;
+
+                const voices = window.speechSynthesis.getVoices();
+                const bestJpVoice = voices.find(v => 
+                    v.lang.includes('ja') && (
+                        v.name.includes('Natural') || 
+                        v.name.includes('Online') || 
+                        v.name.includes('Nanami') || 
+                        v.name.includes('Kyoko') || 
+                        v.name.includes('Google 日本語') ||
+                        v.name.includes('Neural')
+                    )
+                ) || voices.find(v => v.lang.includes('ja') || v.lang.includes('JP'));
+
+                if (bestJpVoice) {
+                    utterance.voice = bestJpVoice;
+                }
+
+                utterance.onend = () => {
+                    if (isInterrupted) return; 
+
+                    playCount++;
+                    if (playCount < MAX_PLAYS) {
+                        updateAudioHint();
+                        autoTimer = setTimeout(() => {
+                            if (!isInterrupted) playVoice(false);
+                        }, 1000);
+                    } else {
+                        document.getElementById('audio-hint').innerText = "⏭️ 准备切换下一条...";
+                        autoTimer = setTimeout(() => {
+                            if (!isInterrupted) nextCard();
+                        }, 1500);
+                    }
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("当前环境不支持语音合成");
+            }
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        document.addEventListener('click', function unlockAudio() {
+            if (!isAudioUnlocked) {
+                isAudioUnlocked = true;
+                isInterrupted = false;
+                playCount = 0; 
+                playVoice(false); 
+            }
+        }, { once: true, capture: true }); 
+
+        renderCard();
+    </script>
+</body>
+</html>
